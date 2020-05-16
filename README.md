@@ -4,9 +4,9 @@
 ## Installation
 Manuell: 
 1. Lade die Zip-Datei herunter und entpacke sie in gewünschten Verzeichnis
-2. Installiere diese Module
+2. Installiere die benötigten Module
 ```
-pip install flask
+pip install -r requirements.txt
 ```
 5. Führe die `install.py` zum einmaligen Installieren des Projektes aus
 ```
