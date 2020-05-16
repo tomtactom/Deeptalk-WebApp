@@ -6,8 +6,6 @@ from cryptography.fernet import Fernet
 from MyLibs import configure
 
 database = configure.database
-room_salt = configure.room_salt
-user_salt = configure.user_salt
 password = configure.password
 
 
