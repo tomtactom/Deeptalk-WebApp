@@ -1,0 +1,58 @@
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		{% if pagetitle %}
+		<title>{{pagetitle}} | Seitenname</title>
+		{% else % }
+		<title>Seitenname</title>
+		{% endif % }
+		<meta name="language" content="de">
+		<meta http-equiv="language" content="deutsch, de">
+    	<meta name="date" content="Wed Apr 22 16:24:52 2020">
+    	{% if keywords %}
+    	<meta name="keywords" content='keyword1,keyword2,{{keywords}}'>
+    	{% else % }
+    	<meta name="keywords" content="keyword1,keyword2">
+    	{% endif % }
+    	{% if description %}
+    	<meta name="description" content='{{description}}'>
+    	{% endif % }
+    	{% if index_in_searchmachines %}
+    	<meta name="robots" content="index, follow">
+    	{% endif %}
+    	<meta name="author" content="Luca & Tom">
+    	<meta name="copyright" content="©Luca & Tom">
+    	{% if color %}
+    	<meta name="msapplication-TileColor" content='{{color[1]}}'>
+    	<meta name="theme-color" content='{{color[1]}}'>
+    	{% else %}
+    	<meta name="msapplication-TileColor" content="#27ae60">
+    	<meta name="theme-color" content="#27ae60">
+    	{% endif %}
+		<style>
+			:root {
+				{% if color %}
+    				--darkcolor: {{color[0]}};
+    				--maincolor: {{color[1]}};
+    			{% else %}
+        			--darkcolor: #0f0f0f;
+    				--maincolor: #27ae60;
+    			{% endif %}
+			}
+		</style>
+		<link rel="apple-touch-icon" sizes="57x57" href="/static/icon/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/static/icon/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/static/icon/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/static/icon/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/static/icon/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/static/icon/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/static/icon/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/static/icon/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/icon/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/static/icon/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icon/favicon-16x16.png">
+        <link rel="manifest" href="/static/manifest.json">
+        <meta name="msapplication-TileImage" content="/static/icon/ms-icon-144x144.png">
+		<link rel="stylesheet" href="/static/css/main.css" />
+		<noscript><link rel="stylesheet" href="/static/css/noscript.css" /></noscript>

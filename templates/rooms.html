@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html lang="de">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<title>Raum | Deeptalk</title>
+		<meta name="language" content="de">
+		<meta http-equiv="language" content="deutsch, de">
+    	<meta name="date" content="Wed Apr 22 16:24:52 2020">
+    	<meta name="keywords" content="deeptalk,gespräche,bigtalk,raum">
+    	<meta name="description" content="Es geht los... Jetzt ist Schluss mit langweiligem Smaltalk.">
+    	<meta name="robots" content="noindex, nofollow">
+    	<meta name="author" content="Luca & Tom">
+    	<meta name="copyright" content="©Luca & Tom">
+    	<meta name="msapplication-TileColor" content='{{color[1]}}'>
+    	<meta name="theme-color" content='{{color[1]}}'>
+		<style>
+			:root {
+				--darkcolor: {{color[0]}};
+				--maincolor: {{color[1]}};
+			}
+		</style>
+		<link rel="apple-touch-icon" sizes="57x57" href="/static/icon/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/static/icon/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/static/icon/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/static/icon/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/static/icon/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/static/icon/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/static/icon/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/static/icon/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/icon/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/static/icon/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icon/favicon-16x16.png">
+        <link rel="manifest" href="/static/manifest.json">
+        <meta name="msapplication-TileImage" content="/static/icon/ms-icon-144x144.png">
+		<link rel="stylesheet" href="/static/css/main.css" />
+		<noscript><link rel="stylesheet" href="/static/css/noscript.css" /></noscript>
+		<script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+		<script>
+    		$("#members").load("/members");
+            var livelog = setInterval(
+            function() {
+                $("#members").load("/members");
+            }, 1000);
+            
+            $("#intro div.inner").load("/question");
+            var livelog = setInterval(
+            function() {
+                $("#intro div.inner").load("/question");
+            }, 1000);
+            
+            $("#check_active").load("/check-active");
+            var livelog = setInterval(
+            function() {
+                $("#check_active").load("/check-active");
+            }, 10000);
+		</script>
+	</head>
+	<body class="is-preload">
+
+		<!-- Teilnehmer -->
+			<section id="sidebar">
+				<div class="inner">
+					<nav>
+						<ul id="members">
+						{% for member in members recursive %}
+    						{% if member[1] == user %}
+    							<li><a>Du bist: {{member[0]}}</a></li>
+    						{% else %}
+    						<li><a>{{member[0]}}</a></li>
+							{% endif %}
+						{% endfor %}
+						</ul>
+					</nav>
+				</div>
+			</section>
+			<div id="wrapper">
+				<!-- Frage -->
+				<section id="intro" class="wrapper style1 fullscreen fade-up">
+					<div class="inner">
+    					{% if activeuser[0] == user %}
+    						<h1>{{question}}</h1>
+    					{% else %}
+    						<p>{{activeuser[1]}} ist dabei dir eine Frage zu stellen</p>
+    					{% endif %}
+    					{% if activeuser[0] == user %}
+    					<form method="post">
+    						<ul class="actions">
+    							<li><button type="submit" name="next_player" value="1">Der nächste ist dran.</button></li>
+    						</ul>
+    					</form>
+                        {% endif %}
+					</div>
+				</section>
+			</div>
+			<div id="check_active" style="display: none;"></div>
+
+		<!-- Scripts -->
+			<script src="/static/js/jquery.min.js"></script>
+			<script src="/static/js/jquery.scrollex.min.js"></script>
+			<script src="/static/js/jquery.scrolly.min.js"></script>
+			<script src="/static/js/browser.min.js"></script>
+			<script src="/static/js/breakpoints.min.js"></script>
+			<script src="/static/js/util.js"></script>
+			<script src="/static/js/main.js"></script>
+	</body>
+</html>

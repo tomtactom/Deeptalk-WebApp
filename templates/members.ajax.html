@@ -1,0 +1,15 @@
+{%- for member in members recursive %}
+    {% if activeuser[0] == member[1] %}
+        {% if member[1] == user %}
+        	<li><a class="active">Du bist: {{member[0]}}</a></li>
+    	{% else %}
+    		<li><a class="active">{{member[0]}}</a></li>
+		{% endif %}
+    {% else %}
+        {% if member[1] == user %}
+    		<li><a>Du bist: {{member[0]}}</a></li>
+    	{% else %}
+    		<li><a>{{member[0]}}</a></li>
+		{% endif %}
+    {% endif %}
+{%- endfor %}

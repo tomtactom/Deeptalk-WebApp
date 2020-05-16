@@ -1,0 +1,12 @@
+{% if activeuser[0] == user %}
+    <h1>{{question}}</h1>
+{% else %}
+    <p>{{activeuser[1]}} ist dabei dir eine Frage zu stellen</p>
+{% endif %}
+{% if activeuser[0] == user %}
+    <form method="post">
+        <ul class="actions">
+            <li><button type="submit" name="next_player" value="1">Der nächste ist dran.</button></li>
+    </ul>
+</form>
+{% endif %}
