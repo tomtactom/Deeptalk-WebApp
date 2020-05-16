@@ -1,0 +1,25 @@
+@font-face {
+  font-family: Quicksand;
+  src: url(/static/fonts/Quicksand-Regular.otf);
+}
+
+@font-face {
+  font-family: Quicksand-Bold;
+  src: url(/static/fonts/Quicksand-Bold.otf);
+}
+
+@font-face {
+  font-family: Quicksand-Italic;
+  src: url(/static/fonts/Quicksand-Italic.otf);
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-family: Quicksand;
+    font-size: 19px;
+}
