@@ -1,0 +1,27 @@
+{% if (user_count != [] or user_count != None) and rooms_count and question_count %}
+<h5>Räume & Nutzer</h5>
+<table>
+    <tr>
+        <th></th>
+        <th>Echtzeit</th>
+        <th>Insgesamt</th>
+    </tr>
+    <tr>
+        <td>Nutzer: </td>
+        <td>{{user_count[0]}}</td>
+        <td>{{user_count[1]}}</td>
+    </tr>
+    <tr>
+        <td>Räume: </td>
+        <td></td>
+        <td>{{rooms_count}}</td>
+    </tr>
+    <tr>
+        <td>Fragen: </td>
+        <td></td>
+        <td>{{question_count}}</td>
+    </tr>
+</table>
+{% else %}
+    <p>Statistik momental leider nicht verfügbar.</p>
+{% endif %}

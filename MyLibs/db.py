@@ -7,7 +7,8 @@ from MyLibs import configure
 
 database = configure.database
 password = configure.password
-
+admin_pw_hash = configure.admin_pw_hash
+hash_salt = configure.hash_salt
 
 def encrypt(message, key):
     return (Fernet(key).encrypt(message.encode())).decode()
@@ -18,6 +19,92 @@ def decrypt(token, key):
     except:
         return "None"
 
+def check_login(pass_hash):
+    if pass_hash == admin_pw_hash:
+        return True
+    else:
+        return False
+
+def get_user_count():
+    con = sql.connect(database)
+    cur = con.cursor()
+    cur.execute("SELECT COUNT(*) FROM users")
+    active_user_count = cur.fetchall()[0][0]
+    cur.execute("SELECT seq FROM sqlite_sequence WHERE name='users'")
+    all_users_count = cur.fetchall()[0][0]
+    con.close()
+    return((active_user_count, all_users_count)) # (all_actual_online_users, all_users_ever)
+
+def get_rooms_count():
+    con = sql.connect(database)
+    cur = con.cursor()
+    cur.execute("SELECT seq FROM sqlite_sequence WHERE name='rooms'")
+    all_rooms = cur.fetchall()[0][0]
+    con.close()
+    return(all_rooms) # (all_rooms)
+
+def get_question_count():
+    con = sql.connect(database)
+    cur = con.cursor()
+    cur.execute("SELECT seq FROM sqlite_sequence WHERE name='questions'")
+    all_rooms = cur.fetchall()[0][0]
+    con.close()
+    return(all_rooms) # (all_questions)
+
+def check_password(password):
+    if hashlib.sha512(bytes(password + hash_salt, "utf8")).hexdigest() == admin_pw_hash:
+        return True
+    else:
+        return False
+
+def update_question(id, question):
+    con = sql.connect(database)
+    cur = con.cursor()
+    cur.execute("UPDATE questions SET question='" + str(question) + "' WHERE question_id='" + str(id) + "'")
+    con.commit()
+    con.close()
+    return("Die Frage wurde erfolgreich geändert.")
+    
+def delete_question(id):
+    con = sql.connect(database)
+    cur = con.cursor()
+    cur.execute("DELETE FROM questions WHERE question_id='" + str(id) + "'")
+    con.commit()
+    con.close()
+    return("Die Frage wurde erfolgreich gelöscht.")
+
+def get_questions():
+    con = sql.connect(database)
+    cur = con.cursor()
+    
+    cur.execute("SELECT question, question_id FROM questions")
+    questions = cur.fetchall()
+    con.close()
+    
+    filtered_questions = []
+    
+    for i in questions:
+        if bytes(i[0][-1], "utf8") == b'\n':
+            filtered_questions.append((i[0][:-1], i[1]))
+        else:
+            filtered_questions.append((i[0], i[1]))
+        
+    return (filtered_questions)
+
+def add_question(question):
+    con = sql.connect(database)
+    cur = con.cursor()
+    cur.execute("SELECT question FROM questions WHERE question='" + str(question) + "'")
+    check_if_question_exist = cur.fetchall()
+    if check_if_question_exist == []:
+        cur.execute("INSERT INTO questions(question) values('" + str(question) + "')")
+        con.commit()
+        con.close()
+        return("Die Frage wurde erfolgreich hinzugefügt.")
+    else:
+        con.close()
+        return("Diese Frage existiert bereits.")
+    
 def create_new_room():
     con = sql.connect(database)
     cur = con.cursor()
@@ -202,13 +289,18 @@ def check_user_exists(user_id):
     else:
         return(True)
     
+def clear_statistics():
+    con = sql.connect(database)
+    cur = con.cursor()
+    cur.execute("DELETE FROM users WHERE timestamp <= strftime('%Y-%m-%d %H:%M:%S','now','-22 seconds')")
+    con.commit()
+    con.close()
+
 def remove_timeouted_user(user_id, room_id):
     con = sql.connect(database)
     cur = con.cursor()
     cur.execute("DELETE FROM users WHERE timestamp <= strftime('%Y-%m-%d %H:%M:%S','now','-22 seconds')")
     con.commit()
-    
-    
     
     cur.execute("SELECT member_id FROM rooms WHERE room_id='" + str(room_id) + "'")
     member_ids = cur.fetchall()[0][0]

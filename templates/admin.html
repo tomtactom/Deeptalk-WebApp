@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html lang="de">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<title>Adminstrationsbereich | Deeptalk</title>
+		<meta name="language" content="de">
+		<meta http-equiv="language" content="deutsch, de">
+    	<meta name="date" content="Wed Apr 22 16:24:52 2020">
+    	<meta name="keywords" content="deeptalk,gespräche,bigtalk,administrationsbereich">
+    	<meta name="description" content="Bist du ein Admin? Wenn nein, lass die Finger hiervon. Ansonsten Kannst du hier Fragen und viel mehr verwalten">
+    	<meta name="robots" content="noindex, nofollow">
+    	<meta name="author" content="Luca & Tom">
+    	<meta name="copyright" content="©Luca & Tom">
+    	<meta name="msapplication-TileColor" content="#27ae60">
+    	<meta name="theme-color" content="#27ae60">
+		<style>
+			:root {
+    			--darkcolor: #0f0f0f;
+				--maincolor: #27ae60;
+    			#intro {
+            		background-image: url("/static/css/images/intro_blur.svg") !important;
+            	}
+			}
+		</style>
+		<link rel="apple-touch-icon" sizes="57x57" href="/static/icon/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/static/icon/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/static/icon/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/static/icon/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/static/icon/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/static/icon/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/static/icon/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/static/icon/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/icon/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/static/icon/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icon/favicon-16x16.png">
+        <link rel="manifest" href="/static/manifest.json">
+        <meta name="msapplication-TileImage" content="/static/icon/ms-icon-144x144.png">
+		<link rel="stylesheet" href="/static/css/main.css" />
+		<noscript><link rel="stylesheet" href="/static/css/noscript.css" /></noscript>
+		<script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+		<script>
+    		$("aside#ajax_statistics").load("/statistics");
+            var livelog = setInterval(
+            function() {
+                $("aside#ajax_statistics").load("/statistics");
+            }, 10000);
+		
+    		var minRows = 1;
+            var maxRows = 10;
+            function ResizeTextarea(id) {
+                var t = document.getElementById(id);
+                if (t.scrollTop == 0) t.scrollTop = 1;
+                while (t.scrollTop == 0) {
+                    if (t.rows > minRows)
+                        t.rows--; else
+                        break;
+                    t.scrollTop = 1;
+                    if (t.rows < maxRows)
+                        t.style.overflowY = "hidden";
+                    if (t.scrollTop > 0) {
+                        t.rows++;
+                        break;
+                    }
+                }
+                while (t.scrollTop > 0) {
+                    if (t.rows < maxRows) {
+                        t.rows++;
+                        if (t.scrollTop == 0) t.scrollTop = 1;
+                    } else {
+                        t.style.overflowY = "auto";
+                        break;
+                    }
+                }
+            }
+		</script>
+	</head>
+	<body class="is-preload">
+			<div>
+				<!-- Frage -->
+				<section id="intro" class="wrapper style1 fullscreen fade-up">
+					<div class="inner">
+					{% if loggedin == True %}
+    					<nav style="padding: 20px; border-radius: 5px 5px 5px 5px; border: 2px solid #dddddd; margin-bottom: 20px;">
+        					<h3>Navigation</h3>
+        					<hr>
+        					<ul style="list-style: none;">
+            					<li><a href="#neue_frage" title="Eine neue Frage hinzufügen">Eine neue Frage hinzufügen</li>
+            					<li><a href="#vorhandene_fragen" title="Vorhandene Fragen">Vorhandene Fragen</li>
+            					<li><a href="#statistik" title="Statistik">Statistik</a></li>
+            					<li><a href="/logout" title="Abmelden">Abmelden</a></li>
+        					</ul>
+        				</nav>
+                        <h3><u>Fragen verwalten</u></h3>
+                        <h4 id="neue_frage">Eine neue Frage hinzufügen</h4>
+                        <form method="post">
+                            <div class="row gtr-uniform" style="line-height: 12px;">
+                                <div class="col-6 col-12-xsmall">
+                                    <input type="text" name="question" minlength="10" maxlength="255" id="inputQuestion" autocomplete="off" placeholder="Gebe eine beliebige Frage ein?" required>
+                                </div>
+                                <div class="col-6 col-12-xsmall">
+                                    <ul class="actions">
+                                        <li><button type="submit" name="new_question" value="1">Frage hinzufügen</button></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </form>
+                        {% if message %}
+                        {{message}}
+                        {% endif %}
+                        <hr>
+                        <h4 id="vorhandene_fragen">Vorhandene Fragen</h4>
+                        <div>
+                            {%- for question,id in questions recursive %}
+                                <form method="post">
+                                    <div class="row gtr-uniform" style="line-height: 12px;">
+                                        <div class="col-6 col-12-xsmall">
+                                            <textarea name="question" minlength="10" maxlength="255" id='question{{id}}' oninput="ResizeTextarea('question{{id}}');" placeholder="{{question}}" autocomplete="off" style="resize: none;" required>{{question}}</textarea>
+                                            <script>
+                                                ResizeTextarea('question{{id}}');
+                                            </script>
+                                        </div>
+                                        <input type="hidden" name="id" value="{{id}}">
+                                        <div class="col-6 col-12-xsmall">
+                                            <ul class="actions">
+                                                <li style="margin-top: 22px;"><strong>{{id}}</strong></li>
+                                                <li><input type="submit" name="update" value="bearbeiten"></li>
+                                                <li><input type="submit" name="delete" value="löschen"></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </form>
+                                <hr>
+                            {%- endfor %}
+                        </div>
+                        <h3 id="statistik">Statistik</h3>
+                        <aside id="ajax_statistics">{% include "statistics.ajax.html" %}</aside>
+                    
+                    {% else %}
+                        <h2>Login zum Adminstrationsbereich</h2>
+                        <form method="post">
+                            <div class="row gtr-uniform" style="line-height: 12px;">
+                                <div class="col-6 col-12-xsmall">
+                                    <input type="password" name="password" id="inputUsername" placeholder="Passwort" required>
+                                </div>
+                                <div class="col-6 col-12-xsmall">
+                                    <ul class="actions">
+                                        <li><button type="submit" name="login" value="1">Login</button></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </form>
+                    {% if message %}
+                    {{message}}
+                    {% endif %}
+                    {% endif %}
+					</div>
+				</section>
+			</div>
+
+		<!-- Scripts -->
+			<script src="/static/js/jquery.min.js"></script>
+			<script src="/static/js/jquery.scrollex.min.js"></script>
+			<script src="/static/js/jquery.scrolly.min.js"></script>
+			<script src="/static/js/browser.min.js"></script>
+			<script src="/static/js/breakpoints.min.js"></script>
+			<script src="/static/js/util.js"></script>
+			<script src="/static/js/main.js"></script>
+	</body>
+</html>

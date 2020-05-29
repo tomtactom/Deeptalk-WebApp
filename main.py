@@ -12,6 +12,77 @@ from MyLibs import db, configure
 app = Flask(__name__)
 app.secret_key = configure.Session_Secret_Key
 
+@app.route('/admin', methods=['GET', 'POST'])# Login seite
+def admin():
+    if request.method == "GET":
+        if session.get("login"):
+            if db.check_login(session["login"]):
+                return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), rooms_count=db.get_rooms_count(), user_count=db.get_user_count(), questions=db.get_questions())
+        else:
+            return render_template("admin.html")
+    elif request.method == "POST":
+        if "login" in request.form:
+            if "password" in request.form and db.check_password(request.form["password"]):
+                # create session with password hash
+                session["login"] = configure.admin_pw_hash
+                #return adminbereich
+                db.clear_statistics()
+                return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), questions=db.get_questions())
+            else:
+                return render_template("admin.html", message="Falsches Passwort. Bitte lade die Seite neu und versuche erneut dich anzumelden")
+        elif session and session["login"]:
+            if db.check_login(session["login"]):
+                if "new_question" in request.form:
+                    if "question" in request.form:
+                        if len(request.form["question"]) < 10 or len(request.form["question"]) > 255:
+                            session.clear()
+                            return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
+                        else:
+                            return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), message=db.add_question(request.form["question"]), questions=db.get_questions())
+                        
+                    else:
+                        session.clear()
+                        return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
+                        
+                elif "delete" in request.form:
+                    if "id" in request.form:
+                        try:
+                           val = int(request.form["id"])
+                        except ValueError:
+                           session.clear()
+                           return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
+                       
+                        return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), message = db.delete_question(request.form["id"]), questions=db.get_questions())
+                    else:
+                        session.clear()
+                        return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
+                
+                elif "update" in request.form:
+                    if "question" in request.form and "id" in request.form:
+                        try:
+                           val = int(request.form["id"])
+                        except ValueError:
+                           session.clear()
+                           return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
+                       
+                        if len(request.form["question"]) < 10 or len(request.form["querstion"]) > 255:
+                            session.clear()
+                            return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
+                        else:
+                            return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), message=db.update_question(request.form["id"], request.form["question"]) , questions=db.get_questions())
+                   
+                    else:
+                        session.clear()
+                        return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
+                    
+                else:
+                    session.clear()
+                    return render_template("admin.html", message="Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
+            else:
+                return render_template("admin.html", message="Du bist nicht angemeldet.")
+            
+        else:
+            return render_template("admin.html", message="Ungültiger Request. Bitte lade die Seite neu und versuche erneut dich anzumelden")
 
 @app.route('/', methods=['GET', 'POST'])# Login seite
 def main():
@@ -44,7 +115,7 @@ def rooms(roomID):
             if db.check_session(user_id, room_id) == True and room_id == db.decrypt(roomID, db.password):
                 db.update_active(user_id, room_id, only_update=True)
                 if db.check_active_player(user_id, room_id):
-                    if request.form["next_player"]:
+                    if request.form["next_player"]: # Neue Frage
                         activeuser_id = db.change_active_user(int(user_id), room_id)
                         return render_template("rooms.html", members=db.get_members(room_id), question=db.get_new_question(room_id), user=int(user_id), activeuser=activeuser_id, color=configure.matching_color[randint(0,len(configure.matching_color)-1)])
                 
@@ -63,6 +134,7 @@ def invite(roomID):
     elif request.method == "GET":
         return render_template("invite.html", room_id_crypt=roomID )
 
+# Ajax
 @app.route('/members', methods=['GET'])
 def get_members():
     if request.method == "GET":
@@ -74,7 +146,8 @@ def get_members():
                 return("keine session vorhanden")
         else:
             return("Etwas hat nicht funktioniert...")
-        
+
+# Ajax
 @app.route('/question', methods=['GET'])
 def get_question():
     if request.method == "GET":
@@ -85,6 +158,23 @@ def get_question():
         else:
             return("Etwas hat nicht funktioniert...")
 
+# Ajax
+@app.route('/statistics', methods=['GET'])
+def get_statistics():
+    if request.method == "GET":
+        if session and session["login"]:
+            if db.check_login(session["login"]):
+                db.clear_statistics()
+                return render_template("statistics.ajax.html", question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count())
+            else:
+                session.clear()
+                return redirect("/")
+        else:
+            session.clear()
+            return redirect("/")
+
+
+# Ajax
 @app.route('/check-active', methods=['GET'])
 def check_active():
     if request.method == "GET":
@@ -95,6 +185,22 @@ def check_active():
             return("keine session vorhanden")
         else:
             return("Etwas hat nicht funktioniert...")
+
+# Logout
+@app.route('/logout', methods=['POST', "GET"])
+def logout():
+    if request.method == "POST" or request.method == "GET":
+        if session:
+            session.clear()
+            return redirect("/")
+        else:
+            return redirect("/")
+
+@app.errorhandler(404)
+def internal_error(e):
+	return redirect("/")
+
+
 
 @app.errorhandler(500)
 def internal_error(e):
@@ -108,6 +214,18 @@ if __name__ == "__main__":
 		port =        configure.port # Port setzen
 		)
 
+# bei logout user aus db löschen
 
-# User aktivität überprüfen
-# Fragen mit rooms tabbel abgleichen
+
+# Clickscounter
+#           Ausloggen Butten für Admin und Userbereich
+#               --> css buttons appear
+# Räume und User als Ordnerstruktur
+# Online configure.py Editor
+
+# Alte Räume automatisch löschen
+# Impressum/Datenschutz
+# Kontaktformularseite &  Eigene Fragen einreichen
+# Eine install.py fürs erste Setup
+# Ausführliche Dokumentation und Anleitung/Erklärung
+# Logdatei (logger.log() from Cloud)

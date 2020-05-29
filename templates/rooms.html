@@ -59,7 +59,6 @@
 		</script>
 	</head>
 	<body class="is-preload">
-
 		<!-- Teilnehmer -->
 			<section id="sidebar">
 				<div class="inner">
@@ -74,11 +73,17 @@
 						{% endfor %}
 						</ul>
 					</nav>
+					<form action="/logout" id="logout_header" method="post">
+                        <button type="submit" name="logout" value="1">Abmelden</button>
+                    </form>
 				</div>
 			</section>
 			<div id="wrapper">
 				<!-- Frage -->
 				<section id="intro" class="wrapper style1 fullscreen fade-up">
+				<form action="/logout" id="logout_mobile" method="post">
+                    <button type="submit" name="logout" value="1">Abmelden</button>
+                </form>
 					<div class="inner">
     					{% if activeuser[0] == user %}
     						<h1>{{question}}</h1>

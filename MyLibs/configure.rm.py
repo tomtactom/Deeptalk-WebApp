@@ -1,5 +1,3 @@
-# Erstelle manuell eine configure.py mit diesem Inhalt bei dem du die Strings ausfüllst
-
 matching_color = [
     ("#e67e22","#2c3e50"),
     ("#2980b9","#2c3e50"),
@@ -32,9 +30,12 @@ matching_color = [
 database = "./Databases/database.db"
 
 debug = False       # Wird nicht gedebugt
-host = ''    # Host setzen
+host = '0.0.0.0'    # Host setzen
 threaded = True     # Multithreading erlaubt mehrere Clients gleichzeitig
 port = ''       # Port setzen
 
-password = ""
+hash_salt = "<a random utf8 salt>"  #  Your random hash salt
+admin_pw_hash = "<your hashed password>"
+# admin_pw_hash  = hashlib.sha512(bytes(<your_password> + hash_salt, "utf8")).hexdigest()
+password = "" # password for room_id
 Session_Secret_Key = b''
