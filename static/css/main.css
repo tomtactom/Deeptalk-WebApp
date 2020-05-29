@@ -3901,12 +3901,22 @@ input, select, textarea {
 		#intro p {
 			font-size: 1.25em;
 		}
+		
+		#logout_mobile {
+    		position: absolute;
+            top: 5px;
+            left: 5px;
+		}
 
 			@media screen and (max-width: 980px) {
 
 				#intro p br {
 					display: none;
 				}
+				
+			}
+			
+			
 
 			}
 
@@ -3915,13 +3925,38 @@ input, select, textarea {
 				#intro p {
 					font-size: 1em;
 				}
+				
+				#logout_mobile{
+    				position: absolute;
+    				top:5px;
+    				left:5px;
+				}
+				
 
 			}
+			
+			
 
 		@media screen and (max-width: 1280px) {
 
 			#intro {
 				background-attachment: scroll;
 			}
+			
+			
 
+
+		}
+
+		
+		@media screen and (min-width: 736px){
+			#logout_header{
+                position: absolute;
+                bottom: 0;
+                left: 10px;
+                margin-bottom: 2px;
+			}
+    			#logout_mobile {
+    			display: none !important;
+			}
 		}
