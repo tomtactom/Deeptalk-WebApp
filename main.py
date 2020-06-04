@@ -7,7 +7,7 @@ Version: 0.1v
 
 from flask import *
 from random import randint
-from MyLibs import db, configure
+from MyLibs import db, configure, logger
 
 app = Flask(__name__)
 app.secret_key = configure.Session_Secret_Key
@@ -15,20 +15,25 @@ app.secret_key = configure.Session_Secret_Key
 @app.route('/admin', methods=['GET', 'POST'])# Login seite
 def admin():
     if request.method == "GET":
+        logger.log( ip=request.remote_addr,message="Hat die admin-login Seite aufgerufen")
         if session.get("login"):
+            
             if db.check_login(session["login"]):
+                logger.log( ip=request.remote_addr, message="Ist als Admin eingeloggt")
                 return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), rooms_count=db.get_rooms_count(), user_count=db.get_user_count(), questions=db.get_questions())
         else:
+            logger.log( ip=request.remote_addr, message="Hat eine falsche Admin-Session benutzt")
             return render_template("admin.html")
     elif request.method == "POST":
         if "login" in request.form:
             if "password" in request.form and db.check_password(request.form["password"]):
                 # create session with password hash
+                logger.log( ip=request.remote_addr, message="Hat sich eingeloggt")
                 session["login"] = configure.admin_pw_hash
-                #return adminbereich
                 db.clear_statistics()
                 return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), questions=db.get_questions())
             else:
+                logger.log( ip=request.remote_addr, message="Hat ein falsches Passwort benutzt")
                 return render_template("admin.html", message="Falsches Passwort. Bitte lade die Seite neu und versuche erneut dich anzumelden")
         elif session and session["login"]:
             if db.check_login(session["login"]):
@@ -38,6 +43,7 @@ def admin():
                             session.clear()
                             return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
                         else:
+                            logger.log( ip=request.remote_addr, message="Hat die Frage: '" + request.form["question"] + "' hinzugefügt")
                             return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), message=db.add_question(request.form["question"]), questions=db.get_questions())
                         
                     else:
@@ -49,9 +55,9 @@ def admin():
                         try:
                            val = int(request.form["id"])
                         except ValueError:
-                           session.clear()
-                           return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
-                       
+                            session.clear()
+                            return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
+                        logger.log( ip=request.remote_addr, message="Hat hat Frage " + request.form["id"]  + " gelöscht")
                         return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), message = db.delete_question(request.form["id"]), questions=db.get_questions())
                     else:
                         session.clear()
@@ -64,14 +70,16 @@ def admin():
                         except ValueError:
                            session.clear()
                            return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
-                       
-                        if len(request.form["question"]) < 10 or len(request.form["querstion"]) > 255:
+
+                        if len(str(request.form["question"])) < 10 or len(str(request.form["question"])) > 255:
                             session.clear()
                             return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
                         else:
+                            logger.log( ip = request.remote_addr, message="Hat Frage " + request.form["id"] + " geändert")
                             return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), message=db.update_question(request.form["id"], request.form["question"]) , questions=db.get_questions())
                    
                     else:
+
                         session.clear()
                         return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
                     
@@ -86,6 +94,8 @@ def admin():
 
 @app.route('/', methods=['GET', 'POST'])# Login seite
 def main():
+    if session:
+        session.clear()
     if request.method == "POST":
         if request.form["create_room"]:
             room_id = db.create_new_room()
@@ -132,6 +142,8 @@ def invite(roomID):
             return(render_template("invite.html", message="Dieser Raum existiert nicht..."))
         return(render_template("invite.html", message="Etwas hat nicht funktioniert..."))
     elif request.method == "GET":
+        if session:
+            session.clear()
         return render_template("invite.html", room_id_crypt=roomID )
 
 # Ajax
@@ -191,6 +203,12 @@ def check_active():
 def logout():
     if request.method == "POST" or request.method == "GET":
         if session:
+            if session.get("session"):
+                user_id, room_id = session["session"]
+                if db.check_session(user_id, room_id) == True:
+                    print("a ausführen")
+                    db.delete_user(user_id, room_id)
+                    print("a ausgeführt")
             session.clear()
             return redirect("/")
         else:
@@ -198,25 +216,25 @@ def logout():
 
 @app.errorhandler(404)
 def internal_error(e):
-	return redirect("/")
+    return redirect("/")
 
 
 
 @app.errorhandler(500)
 def internal_error(e):
-	return render_template("error/500.html")
+    return render_template("error/500.html")
 
 if __name__ == "__main__":
-	app.run(
-		debug =       configure.debug, # Wird nicht gedebugt
-		host =        configure.host,# Host setzen
-		threaded =    configure.threaded,# Multithreading erlaubt mehrere Clients gleichzeitig
-		port =        configure.port # Port setzen
-		)
+    app.run(
+        debug =       configure.debug, # Wird nicht gedebugt
+        host =        configure.host,# Host setzen
+        threaded =    configure.threaded,# Multithreading erlaubt mehrere Clients gleichzeitig
+        port =        configure.port # Port setzen
+    )
 
 # bei logout user aus db löschen
 
-
+# Einladungslink teilen Button
 # Clickscounter
 #           Ausloggen Butten für Admin und Userbereich
 #               --> css buttons appear

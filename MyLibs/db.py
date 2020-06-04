@@ -25,6 +25,41 @@ def check_login(pass_hash):
     else:
         return False
 
+
+def delete_user(user_id, room_id):
+    print("a wird ausgeführt")
+    con = sql.connect(database)
+    cur = con.cursor()
+    cur.execute("DELETE FROM users WHERE user_id='" + str(user_id) + "'")
+    con.commit()
+    
+    cur.execute("SELECT member_id FROM rooms WHERE room_id='" + str(room_id) + "'")
+    member_ids = cur.fetchall()[0][0]
+    if str(member_ids) == str(user_id):
+        print("last user")
+        cur.execute("UPDATE rooms SET member_id='-1' WHERE room_id='" + str(room_id) + "'")
+        con.commit()
+        cur.execute("UPDATE rooms SET activeuser_id='-1' WHERE room_id='" + str(room_id) + "'")
+        con.commit()
+    else:
+        print("not last")
+        active_member_ids = []
+        for member_id in member_ids.split(','):
+            if member_id != str(user_id):
+                active_member_ids.append(member_id)
+        
+        active_member_str = ""
+        for member in active_member_ids:
+            active_member_str += str(member) + ","
+            
+        active_member_str = active_member_str[:-1]
+        print("###############\n",active_member_str, "\n###########")
+        
+        cur.execute("UPDATE rooms SET member_id='" + str(active_member_str) + "' WHERE room_id='" + str(room_id) + "'")
+        con.commit()
+    con.close()
+
+
 def get_user_count():
     con = sql.connect(database)
     cur = con.cursor()
@@ -296,6 +331,8 @@ def clear_statistics():
     con.commit()
     con.close()
 
+
+
 def remove_timeouted_user(user_id, room_id):
     con = sql.connect(database)
     cur = con.cursor()
@@ -316,6 +353,7 @@ def remove_timeouted_user(user_id, room_id):
     active_member_str = active_member_str[:-1]
     
     cur.execute("UPDATE rooms SET member_id='" + str(active_member_str) + "' WHERE room_id='" + str(room_id) + "'")
+
     con.commit()
     
 
