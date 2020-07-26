@@ -17,7 +17,7 @@ def admin():
     if request.method == "GET":
         logger.log( ip=request.remote_addr,message="Hat die admin-login Seite aufgerufen")
         if session.get("login"):
-            
+
             if db.check_login(session["login"]):
                 logger.log( ip=request.remote_addr, message="Ist als Admin eingeloggt")
                 return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), rooms_count=db.get_rooms_count(), user_count=db.get_user_count(), questions=db.get_questions())
@@ -45,11 +45,11 @@ def admin():
                         else:
                             logger.log( ip=request.remote_addr, message="Hat die Frage: '" + request.form["question"] + "' hinzugefügt")
                             return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), message=db.add_question(request.form["question"]), questions=db.get_questions())
-                        
+
                     else:
                         session.clear()
                         return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
-                        
+
                 elif "delete" in request.form:
                     if "id" in request.form:
                         try:
@@ -62,7 +62,7 @@ def admin():
                     else:
                         session.clear()
                         return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
-                
+
                 elif "update" in request.form:
                     if "question" in request.form and "id" in request.form:
                         try:
@@ -77,18 +77,18 @@ def admin():
                         else:
                             logger.log( ip = request.remote_addr, message="Hat Frage " + request.form["id"] + " geändert")
                             return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), message=db.update_question(request.form["id"], request.form["question"]) , questions=db.get_questions())
-                   
+
                     else:
 
                         session.clear()
                         return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
-                    
+
                 else:
                     session.clear()
                     return render_template("admin.html", message="Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
             else:
                 return render_template("admin.html", message="Du bist nicht angemeldet.")
-            
+
         else:
             return render_template("admin.html", message="Ungültiger Request. Bitte lade die Seite neu und versuche erneut dich anzumelden")
 
@@ -103,7 +103,7 @@ def main():
     elif request.method == "GET":
         #
         return render_template("index.html")
-        
+
 
 @app.route('/rooms/<roomID>', methods=['GET', 'POST'])# Haupt Seite
 def rooms(roomID):
@@ -124,11 +124,11 @@ def rooms(roomID):
             user_id, room_id = session["session"]
             if db.check_session(user_id, room_id) == True and room_id == db.decrypt(roomID, db.password):
                 db.update_active(user_id, room_id, only_update=True)
-                if db.check_active_player(user_id, room_id):
+                if db.ctive_player(user_id, room_id):
                     if request.form["next_player"]: # Neue Frage
                         activeuser_id = db.change_active_user(int(user_id), room_id)
                         return render_template("rooms.html", members=db.get_members(room_id), question=db.get_new_question(room_id), user=int(user_id), activeuser=activeuser_id, color=configure.matching_color[randint(0,len(configure.matching_color)-1)])
-                
+
 @app.route('/invite/<roomID>', methods=['POST', 'GET'])# Invite Seite
 def invite(roomID):
     if request.method == "POST":
@@ -138,6 +138,7 @@ def invite(roomID):
                 room_id_crypt = request.form["room_id_crypt"]
                 user_id, room_id = db.create_new_user(username, room_id_crypt )
                 session["session"] = (user_id, room_id)
+                print((user_id, room_id))
                 return(redirect("/rooms/" + room_id_crypt ))
             return(render_template("invite.html", message="Dieser Raum existiert nicht..."))
         return(render_template("invite.html", message="Etwas hat nicht funktioniert..."))

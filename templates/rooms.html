@@ -44,13 +44,13 @@
             function() {
                 $("#members").load("/members");
             }, 1000);
-            
+
             $("#intro div.inner").load("/question");
             var livelog = setInterval(
             function() {
                 $("#intro div.inner").load("/question");
             }, 1000);
-            
+
             $("#check_active").load("/check-active");
             var livelog = setInterval(
             function() {
@@ -76,6 +76,7 @@
 					<form action="/logout" id="logout_header" method="post">
                         <button type="submit" name="logout" value="1">Abmelden</button>
                     </form>
+										<!--<a href="whatsapp://send?text=Text durch native Deeplink!">Send via Whatsapp</a>-->
 				</div>
 			</section>
 			<div id="wrapper">
