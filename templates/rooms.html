@@ -78,20 +78,17 @@
                     </form>
 					<a href='whatsapp://send?text=http://www.deeptalk.tk:8080/invite/{{room}}'>WhatsApp</a>
                     <a href='https://web.skype.com/share?url=http://www.deeptalk.tk:8080/invite/{{room}}'>Skype</a>
-                    
-                    
                     <script>
-                        function copy(that){
-                            var inp =document.createElement('input');
-                            document.body.appendChild(inp)
-                            inp.value =that.textContent
-                            inp.select();
-                            document.execCommand('copy',false);
-                            inp.remove();
-                        }
+                    	function copy() {
+                    		  const el = document.createElement('textarea');
+                    		  el.value = "http://www.deeptalk.tk:8080/invite/{{room}}";
+                    		  document.body.appendChild(el);
+                    		  el.select();
+                    		  document.execCommand('copy');
+                    		  document.body.removeChild(el);
+                    	}
                     </script>
-                    
-                    <p onclick="copy(https://web.skype.com/share?url=http://www.deeptalk.tk:8080/invite/{{room}})">Copy invite link</p>
+                    <input readonly onclick="copy()" value="http://www.deeptalk.tk:8080/invite/{{room}}" style="cursor:pointer;">
                     
                     <input type="text" id="copyInviteLink" readonly value="http://www.deeptalk.tk:8080/invite/{{room}}">
 			</section>
