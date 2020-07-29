@@ -112,7 +112,7 @@ def rooms(roomID):
             user_id, room_id = session["session"]
             if db.check_session(user_id, room_id) == True:
                 db.update_active(user_id, room_id, only_update=True)
-                return render_template("rooms.html", members=db.get_members(room_id), question=db.get_actual_question(room_id), user=int(user_id), activeuser=db.get_active_user(room_id), color=configure.matching_color[randint(0,len(configure.matching_color)-1)])
+                return render_template("rooms.html", members=db.get_members(room_id), question=db.get_actual_question(room_id), user=int(user_id), activeuser=db.get_active_user(room_id), color=configure.matching_color[randint(0,len(configure.matching_color)-1)], room=roomID)
             else:
                 session.clear() # Session löschen, wenn der Nutzer nicht in der Datenbank gefunden wurde.
                 return(redirect("/invite/" + db.encrypt(room_id, db.password)))
