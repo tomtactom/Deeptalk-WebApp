@@ -95,8 +95,7 @@ def admin():
 @app.route('/', methods=['GET', 'POST'])# Login seite
 def main():
     if session:
-        #session.clear()
-        pass
+        session.clear()
     if request.method == "POST":
         if request.form["create_room"]:
             room_id = db.create_new_room()
