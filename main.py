@@ -95,7 +95,8 @@ def admin():
 @app.route('/', methods=['GET', 'POST'])# Login seite
 def main():
     if session:
-        session.clear()
+        #session.clear()
+        pass
     if request.method == "POST":
         if request.form["create_room"]:
             room_id = db.create_new_room()
@@ -157,7 +158,7 @@ def get_members():
             else:
                 return("keine session vorhanden")
         else:
-            return("Etwas hat nicht funktioniert...")
+            return("Etwas hat nicht funktioniert(Keine Session da)...")
 
 # Ajax
 @app.route('/question', methods=['GET'])
@@ -168,7 +169,7 @@ def get_question():
             if db.check_session(user_id, room_id) == True:
                 return render_template("question.ajax.html", question=db.get_actual_question(room_id), activeuser=db.get_active_user(room_id), user=int(user_id))
         else:
-            return("Etwas hat nicht funktioniert...")
+            return("Etwas hat nicht funktioniert(Session nicht vorhanden)...")
 
 # Ajax
 @app.route('/statistics', methods=['GET'])
