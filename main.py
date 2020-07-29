@@ -125,7 +125,7 @@ def rooms(roomID):
             user_id, room_id = session["session"]
             if db.check_session(user_id, room_id) == True and room_id == db.decrypt(roomID, db.password):
                 db.update_active(user_id, room_id, only_update=True)
-                if db.active_player(user_id, room_id):
+                if db.check_active_player(user_id, room_id):
                     if request.form["next_player"]: # Neue Frage
                         activeuser_id = db.change_active_user(int(user_id), room_id)
                         return render_template("rooms.html", members=db.get_members(room_id), question=db.get_new_question(room_id), user=int(user_id), activeuser=activeuser_id, color=configure.matching_color[randint(0,len(configure.matching_color)-1)], room=roomID)
