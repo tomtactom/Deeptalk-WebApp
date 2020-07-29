@@ -77,32 +77,7 @@
                         <button type="submit" name="logout" value="1">Abmelden</button>
                     </form>
 										<a href='whatsapp://send?text=http://www.deeptalk.tk:8080/invite/{{room}}'>Send via Whatsapp</a>
-										<script>
-										// Place this code in the head section of your HTML file
-										(function(r, d, s) {
-											r.loadSkypeWebSdkAsync = r.loadSkypeWebSdkAsync || function(p) {
-												var js, sjs = d.getElementsByTagName(s)[0];
-												if (d.getElementById(p.id)) { return; }
-												js = d.createElement(s);
-												js.id = p.id;
-												js.src = p.scriptToLoad;
-												js.onload = p.callback
-												sjs.parentNode.insertBefore(js, sjs);
-											};
-											var p = {
-												scriptToLoad: 'https://swx.cdn.skype.com/shared/v/latest/skypewebsdk.js',
-												id: 'skype_web_sdk'
-											};
-											r.loadSkypeWebSdkAsync(p);
-										})(window, document, 'script');
-										</script>
-
-										<!-- Add class skype-share and data-style attribute with value (large, small, circle, square) to get the default button style -->
-										<!-- Additional attributes: data-lang='en-US' (for language) data-href='' (use '' for page URL, 'www.skype.com' for specific URL) -->
-										<!-- data-text = 'some message' (to pre-fill the message to that will be shared by the user, use '' to prompt user to enter a message) -->
-										<!-- Place the code of the share button where you what the share button to appear -->
-										<div tabindex='0' onKeydown='skypeShareKeyDownHandler(event)' class='skype-share' data-href='http://www.deeptalk.tk:8080/invite/{{room}}' data-lang='de-DE' data-text='' data-style='circle' ></div>
-				</div>
+                                        <a href='https://web.skype.com/share?url=http://www.deeptalk.tk:8080/invite/{{room}}'>Send via Skype</a>
 			</section>
 			<div id="wrapper">
 				<!-- Frage -->
