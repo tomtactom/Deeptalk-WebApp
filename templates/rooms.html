@@ -76,8 +76,22 @@
 					<form action="/logout" id="logout_header" method="post">
                         <button type="submit" name="logout" value="1">Abmelden</button>
                     </form>
-										<a href='whatsapp://send?text=http://www.deeptalk.tk:8080/invite/{{room}}'>Send via Whatsapp</a>
-                                        <a href='https://web.skype.com/share?url=http://www.deeptalk.tk:8080/invite/{{room}}'>Send via Skype</a>
+					<a href='whatsapp://send?text=http://www.deeptalk.tk:8080/invite/{{room}}'>WhatsApp</a>
+                    <a href='https://web.skype.com/share?url=http://www.deeptalk.tk:8080/invite/{{room}}'>Skype</a>
+                    <script>
+                        const span = document.querySelector("#copyInviteLink");
+                        span.onclick = function() {
+                          document.execCommand("copy");
+                        }
+                        span.addEventListener("copy", function(event) {
+                          event.preventDefault();
+                          if (event.clipboardData) {
+                            event.clipboardData.setData("text/plain", span.textContent);
+                            console.log(event.clipboardData.getData('http://www.deeptalk.tk:8080/invite/{{room}}'))
+                          }
+                        });
+                    </script>
+                    <input type="text" id="copyInviteLink" readonly value="http://www.deeptalk.tk:8080/invite/{{room}}">
 			</section>
 			<div id="wrapper">
 				<!-- Frage -->
