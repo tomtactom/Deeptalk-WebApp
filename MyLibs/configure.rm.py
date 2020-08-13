@@ -27,8 +27,8 @@ matching_color = [
 
 
 
-database = "./Databases/database.db"
-logfile = "./Databases/log.csv"
+database = __file__.replace("MyLibs/configure.py", "") + "Databases/database.db"
+logfile = __file__.replace("MyLibs/configure.py", "") + "Databases/log.csv"
 debug = False       # Wird nicht gedebugt
 host = '0.0.0.0'    # Host setzen
 threaded = True     # Multithreading erlaubt mehrere Clients gleichzeitig

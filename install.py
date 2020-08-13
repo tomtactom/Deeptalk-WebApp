@@ -5,11 +5,11 @@ import os
 from cryptography.fernet import Fernet
 
 if not os.path.exists("./MyLibs/configure.py"):
-   
+
     def get_random_alphaNumeric_string(stringLength=8):
         lettersAndDigits = string.ascii_letters + string.digits
         return ''.join((random.choice(lettersAndDigits) for i in range(stringLength)))
-    
+
     host = input("The ip or domain your web-app is listening to (default=0.0.0.0): ") or "0.0.0.0"
     port = "80"
     while type(port) != int:
@@ -22,19 +22,19 @@ if not os.path.exists("./MyLibs/configure.py"):
             break
         except:
             print("The port mus be an integer between 0 and 65535")
-        
-        
+
+
     admin_password = ""
     while not admin_password:
         print("Please enter a valid password")
         admin_password = input("The password you use to login to the controll center: ")
-    
+
     hash_salt = get_random_alphaNumeric_string(32)
     admin_password_hash = hashlib.sha512(bytes(admin_password + hash_salt, "utf8")).hexdigest()
-    
+
     password = Fernet.generate_key()
     Session_Secret_Key = get_random_alphaNumeric_string(64)
-    
+
     configure="""matching_color = [
 	("#e67e22","#2c3e50"),
 	("#2980b9","#2c3e50"),
@@ -62,8 +62,8 @@ if not os.path.exists("./MyLibs/configure.py"):
 	("#16a085","#34495e"),
 	]
 
-database = "./Databases/database.db"
-logfile = "./Databases/log.csv"
+database = __file__.replace("MyLibs/configure.py", "") + "Databases/database.db"
+logfile = __file__.replace("MyLibs/configure.py", "") + "Databases/log.csv"
 
 debug = False       # Wird nicht gedebugt
 host = '%(host)s'    # Host setzen
@@ -76,10 +76,10 @@ admin_pw_hash = "%(admin_password_hash)s"
 password = %(password)s # password for room_id
 Session_Secret_Key = b'%(Session_Secret_Key)s'
 """ % {"host": host, "port": port , "hash_salt":hash_salt, "admin_password_hash":admin_password_hash, "password":password, "Session_Secret_Key":Session_Secret_Key}
-	
+
     with open("./MyLibs/configure.py", "w") as file:
         file.write(configure)
-    
+
     if os.path.exists("./Databases/database.rm.db"):
         os.rename(r'./Databases/database.rm.db', r'./Databases/database.db')
     else:
