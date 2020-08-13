@@ -47,7 +47,7 @@
             function() {
                 $("aside#ajax_statistics").load("/statistics");
             }, 10000);
-		
+
     		var minRows = 1;
             var maxRows = 10;
             function ResizeTextarea(id) {
@@ -90,6 +90,7 @@
             					<li><a href="#neue_frage" title="Eine neue Frage hinzufügen">Eine neue Frage hinzufügen</li>
             					<li><a href="#vorhandene_fragen" title="Vorhandene Fragen">Vorhandene Fragen</li>
             					<li><a href="#statistik" title="Statistik">Statistik</a></li>
+											<li><a href="#settings" title="Einstellungen">Einstellungen</a></li>
             					<li><a href="/logout" title="Abmelden">Abmelden</a></li>
         					</ul>
         				</nav>
@@ -137,7 +138,22 @@
                         </div>
                         <h3 id="statistik">Statistik</h3>
                         <aside id="ajax_statistics">{% include "statistics.ajax.html" %}</aside>
-                    
+												<h3 id="settings"></h3>
+												<section>
+													<form method="post" autocomplete="off">
+														<div class="col-6 col-12-xsmall">
+															<input type="password" name="admin_password" pattern="/^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,64}$/g" title="Bitte gebe ein Passwort mit mindestens einem Großbuchstaben, einem Kleinbuchstaben, einer Zahl und einem Sonderzeichen ein. Das Passwort muss mindestens 8 Zeichen lang sein und darf maximal 64 Zeichen lang sein.">
+														</div>
+														<div class="col-6 col-12-xsmall">
+															<input type="checkbox" name="debug_mode">Debug-Modus anschalten
+														</div>
+														<div class="col-6 col-12-xsmall">
+															<input type="name" name="host" value="">
+														</div>
+														</div>
+													</form>
+												</section>
+
                     {% else %}
                         <h2>Login zum Adminstrationsbereich</h2>
                         <form method="post">
