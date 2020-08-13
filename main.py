@@ -207,9 +207,7 @@ def logout():
             if session.get("session"):
                 user_id, room_id = session["session"]
                 if db.check_session(user_id, room_id) == True:
-                    print("a ausführen")
                     db.delete_user(user_id, room_id)
-                    print("a ausgeführt")
             session.clear()
             return redirect("/")
         else:
@@ -233,18 +231,12 @@ if __name__ == "__main__":
         port =        configure.port # Port setzen
     )
 
-# bei logout user aus db löschen
-
-# Einladungslink teilen Button
-# Clickscounter
-#           Ausloggen Butten für Admin und Userbereich
-#               --> css buttons appear
-# Räume und User als Ordnerstruktur
+# Einladungslink teilen Button  --> Design
+# Admin seite passwörter ändern
 # Online configure.py Editor
 
-# Alte Räume automatisch löschen
 # Impressum/Datenschutz
 # Kontaktformularseite &  Eigene Fragen einreichen
-# Eine install.py fürs erste Setup
 # Ausführliche Dokumentation und Anleitung/Erklärung
-# Logdatei (logger.log() from Cloud)
+# Räume und User als Ordnerstruktur
+# Alte Räume automatisch löschen
