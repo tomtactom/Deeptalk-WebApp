@@ -27,7 +27,7 @@ section, summary, time, mark, audio, video {
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;}
-	
+
 html {
     height: 100%;
 }
@@ -2454,7 +2454,7 @@ input, select, textarea {
 			background: #ffffff;
 			border-color: #ffffff;
 			color: var(--darkcolor);
-			content: '\f00c';
+			content: '✔';
 		}
 
 		input[type="checkbox"]:focus + label:before,
@@ -3808,14 +3808,14 @@ input, select, textarea {
 			transform: translateY(2em);
 			opacity: 0;
 		}
-        
+
         @media screen and (min-with: 736px) {
             #sidebar .inner{
                 font-size: 130% !important;
             }
-            
+
         }
-        
+
 		@media screen and (max-width: 1280px) {
 
 			#sidebar {
@@ -3827,7 +3827,7 @@ input, select, textarea {
 				text-align: center;
 				top: 0;
 				width: 100%;
-				
+
 			}
 
 				#sidebar > .inner {
@@ -3901,7 +3901,7 @@ input, select, textarea {
 		#intro p {
 			font-size: 1.25em;
 		}
-		
+
 		#logout_mobile {
     		position: absolute;
             top: 5px;
@@ -3913,10 +3913,10 @@ input, select, textarea {
 				#intro p br {
 					display: none;
 				}
-				
+
 			}
-			
-			
+
+
 
 			}
 
@@ -3925,30 +3925,30 @@ input, select, textarea {
 				#intro p {
 					font-size: 1em;
 				}
-				
+
 				#logout_mobile{
     				position: absolute;
     				top:5px;
     				left:5px;
 				}
-				
+
 
 			}
-			
-			
+
+
 
 		@media screen and (max-width: 1280px) {
 
 			#intro {
 				background-attachment: scroll;
 			}
-			
-			
+
+
 
 
 		}
 
-		
+
 		@media screen and (min-width: 736px){
 			#logout_header{
                 position: absolute;
