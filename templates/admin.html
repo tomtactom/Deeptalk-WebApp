@@ -141,17 +141,31 @@
 												<h3 id="settings"></h3>
 												<section>
 													<form method="post" autocomplete="off">
-														<div class="col-6 col-12-xsmall">
-															<input type="password" name="admin_password" pattern="/^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,64}$/g" title="Bitte gebe ein Passwort mit mindestens einem Großbuchstaben, einem Kleinbuchstaben, einer Zahl und einem Sonderzeichen ein. Das Passwort muss mindestens 8 Zeichen lang sein und darf maximal 64 Zeichen lang sein.">
-														</div>
-														<div class="col-6 col-12-xsmall">
-															<input type="checkbox" name="debug_mode" id="debug_mode" value="1">
-															<label for="debug_mode">Debug-Modus</lable>
-														</div>
-														<div class="col-6 col-12-xsmall">
-															<input type="text" name="host" value="">
-														</div>
-														</div>
+															<div class="col-6 col-12-xsmall">
+																<label>Adminpasswort
+																	<input type="password" name="admin_password" pattern="/^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,64}$/g" title="Bitte gebe ein Passwort mit mindestens einem Großbuchstaben, einem Kleinbuchstaben, einer Zahl und einem Sonderzeichen ein. Das Passwort muss mindestens 8 Zeichen lang sein und darf maximal 64 Zeichen lang sein.">
+																</label>
+															</div>
+															<div class="col-6 col-12-xsmall">
+
+																<label for="debug_mode">Debug-Modus
+																	{% if debugging == true %}
+																		<input type="checkbox" checked name="debug_mode" id="debug_mode" value="1">
+																	{% else %}
+											    						<input type="checkbox" name="debug_mode" id="debug_mode" value="1">
+											    				{% endif %}
+																</lable>
+															</div>
+															<div class="col-6 col-12-xsmall">
+																<label>Host
+																	<input type="text" name="host" placeholder="{{host}}" value="{{host}}">
+																</label>
+															</div>
+															<div class="col-6 col-12-xsmall">
+																<label>Port
+																	<input type="number" name="port" placeholder="{{port}}" value="{{port}}">
+																</label>
+															</div>
 													</form>
 												</section>
 

@@ -20,7 +20,7 @@ def admin():
 
             if db.check_login(session["login"]):
                 logger.log( ip=request.remote_addr, message="Ist als Admin eingeloggt")
-                return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), rooms_count=db.get_rooms_count(), user_count=db.get_user_count(), questions=db.get_questions())
+                return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), rooms_count=db.get_rooms_count(), user_count=db.get_user_count(), questions=db.get_questions(), debugging=configure.debug, host=configure.host, port=configure.port)
         else:
             logger.log( ip=request.remote_addr, message="Hat eine falsche Admin-Session benutzt")
             return render_template("admin.html")
@@ -31,7 +31,7 @@ def admin():
                 logger.log( ip=request.remote_addr, message="Hat sich eingeloggt")
                 session["login"] = configure.admin_pw_hash
                 db.clear_statistics()
-                return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), questions=db.get_questions())
+                return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), questions=db.get_questions(), debugging=configure.debug, host=configure.host, port=configure.port)
             else:
                 logger.log( ip=request.remote_addr, message="Hat ein falsches Passwort benutzt")
                 return render_template("admin.html", message="Falsches Passwort. Bitte lade die Seite neu und versuche erneut dich anzumelden")
@@ -44,7 +44,7 @@ def admin():
                             return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
                         else:
                             logger.log( ip=request.remote_addr, message="Hat die Frage: '" + request.form["question"] + "' hinzugefügt")
-                            return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), message=db.add_question(request.form["question"]), questions=db.get_questions())
+                            return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), message=db.add_question(request.form["question"]), questions=db.get_questions(), debugging=configure.debug, host=configure.host, port=configure.port)
 
                     else:
                         session.clear()
@@ -58,7 +58,7 @@ def admin():
                             session.clear()
                             return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
                         logger.log( ip=request.remote_addr, message="Hat hat Frage " + request.form["id"]  + " gelöscht")
-                        return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), message = db.delete_question(request.form["id"]), questions=db.get_questions())
+                        return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), message = db.delete_question(request.form["id"]), questions=db.get_questions(), debugging=configure.debug, host=configure.host, port=configure.port)
                     else:
                         session.clear()
                         return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
@@ -76,7 +76,7 @@ def admin():
                             return render_template("admin.html", message = "Ungültiger Request. Bitte lade die Seite neu und versuche es erneut.")
                         else:
                             logger.log( ip = request.remote_addr, message="Hat Frage " + request.form["id"] + " geändert")
-                            return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), message=db.update_question(request.form["id"], request.form["question"]) , questions=db.get_questions())
+                            return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), message=db.update_question(request.form["id"], request.form["question"]) , questions=db.get_questions(), debugging=configure.debug, host=configure.host, port=configure.port)
 
                     else:
 
