@@ -151,20 +151,21 @@
 																	{% if debugging == True %}
 																		<input type="checkbox" checked name="debug_mode" id="debug_mode" value="1">
 																	{% else %}
-											    						<input type="checkbox" name="debug_mode" id="debug_mode" value="1">
+											    						<input type="checkbox" name="debug_mode" id="debug_mode">
 											    				{% endif %}
 																	<label for="debug_mode">Debug-Modus</lable>
 															</div>
 															<div class="col-6 col-12-xsmall">
 																<label>Host
-																	<input type="text" name="host" placeholder="{{host}}" value="{{host}}">
+																	<input type="text" name="host" placeholder="{{host}}" value="{{host}}" pattern="^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$" required>
 																</label>
 															</div>
 															<div class="col-6 col-12-xsmall">
 																<label>Port
-																	<input type="number" name="port" placeholder="{{port}}" value="{{port}}">
+																	<input type="number" name="port" placeholder="{{port}}" min="1" max="65535" value="{{port}}" required>
 																</label>
 															</div>
+															<button name="save_changes">Änderungen Speichern</button>
 													</form>
 												</section>
 
