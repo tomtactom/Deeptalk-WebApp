@@ -32,7 +32,7 @@ def delete_user(user_id, room_id):
     cur = con.cursor()
     cur.execute("DELETE FROM users WHERE user_id='" + str(user_id) + "'")
     con.commit()
-    
+
     cur.execute("SELECT member_id FROM rooms WHERE room_id='" + str(room_id) + "'")
     member_ids = cur.fetchall()[0][0]
     if str(member_ids) == str(user_id):
@@ -47,14 +47,14 @@ def delete_user(user_id, room_id):
         for member_id in member_ids.split(','):
             if member_id != str(user_id):
                 active_member_ids.append(member_id)
-        
+
         active_member_str = ""
         for member in active_member_ids:
             active_member_str += str(member) + ","
-            
+
         active_member_str = active_member_str[:-1]
         print("###############\n",active_member_str, "\n###########")
-        
+
         cur.execute("UPDATE rooms SET member_id='" + str(active_member_str) + "' WHERE room_id='" + str(room_id) + "'")
         con.commit()
     con.close()
@@ -64,9 +64,19 @@ def get_user_count():
     con = sql.connect(database)
     cur = con.cursor()
     cur.execute("SELECT COUNT(*) FROM users")
-    active_user_count = cur.fetchall()[0][0]
+    active_user_count = cur.fetchall()
+    print(active_user_count)
+    if active_user_count == []:
+        active_user_count = 0
+    else:
+        active_user_count = active_user_count[0][0]
     cur.execute("SELECT seq FROM sqlite_sequence WHERE name='users'")
-    all_users_count = cur.fetchall()[0][0]
+    all_users_count = cur.fetchall()
+    print(all_users_count)
+    if all_users_count==[]:
+        all_users_count = 0
+    else:
+        all_users_count = all_users_count[0][0]
     con.close()
     return((active_user_count, all_users_count)) # (all_actual_online_users, all_users_ever)
 
@@ -74,7 +84,13 @@ def get_rooms_count():
     con = sql.connect(database)
     cur = con.cursor()
     cur.execute("SELECT seq FROM sqlite_sequence WHERE name='rooms'")
-    all_rooms = cur.fetchall()[0][0]
+    all_rooms = cur.fetchall()
+    print(all_rooms)
+    print("room")
+    if all_rooms==[]:
+        all_rooms = 0
+    else:
+        all_rooms = all_rooms[0][0]
     con.close()
     return(all_rooms) # (all_rooms)
 
@@ -99,7 +115,7 @@ def update_question(id, question):
     con.commit()
     con.close()
     return("Die Frage wurde erfolgreich geändert.")
-    
+
 def delete_question(id):
     con = sql.connect(database)
     cur = con.cursor()
@@ -111,19 +127,19 @@ def delete_question(id):
 def get_questions():
     con = sql.connect(database)
     cur = con.cursor()
-    
+
     cur.execute("SELECT question, question_id FROM questions")
     questions = cur.fetchall()
     con.close()
-    
+
     filtered_questions = []
-    
+
     for i in questions:
         if bytes(i[0][-1], "utf8") == b'\n':
             filtered_questions.append((i[0][:-1], i[1]))
         else:
             filtered_questions.append((i[0], i[1]))
-        
+
     return (filtered_questions)
 
 def add_question(question):
@@ -139,7 +155,7 @@ def add_question(question):
     else:
         con.close()
         return("Diese Frage existiert bereits.")
-    
+
 def create_new_room():
     con = sql.connect(database)
     cur = con.cursor()
@@ -173,7 +189,7 @@ def create_new_user(username, room_id_crypt):
          con.commit()
     con.close()
     return( user_id , room_id)
-    
+
 def check_session(user_id, room_id):
     con = sql.connect(database)
     cur = con.cursor()
@@ -226,7 +242,7 @@ def get_user_by_id(user_id):
         user_name = (None, None)
     else:
         user_name = user_name[0][0]
-        
+
     con.close()
     return(user_name)# username
 
@@ -258,11 +274,11 @@ def change_active_user(user_id, room_id):
                 break
             else:
 
-                activeuser_id = members[i+1][1] 
+                activeuser_id = members[i+1][1]
                 break
 
     con = sql.connect(database)
-    cur = con.cursor() 
+    cur = con.cursor()
     cur.execute("UPDATE rooms SET activeuser_id='" + str(activeuser_id) + "' WHERE room_id='" + room_id + "'")
     con.commit()
     con.close()
@@ -271,7 +287,7 @@ def change_active_user(user_id, room_id):
 
 def get_actual_question(room_id):
     con = sql.connect(database)
-    cur = con.cursor() 
+    cur = con.cursor()
     cur.execute("SELECT actual_question FROM rooms WHERE room_id='" + str(room_id) + "'")
     question_id = cur.fetchall()[0][0]
     cur.execute("SELECT question FROM questions WHERE question_id='" + str(question_id) + "'")
@@ -281,7 +297,7 @@ def get_actual_question(room_id):
 
 def get_new_question(room_id):
     con = sql.connect(database)
-    cur = con.cursor() 
+    cur = con.cursor()
     cur.execute("SELECT passed_questions FROM rooms WHERE room_id='" + str(room_id) + "'")
     passed_questions = cur.fetchall()[0][0]
     cur.execute("SELECT question_id, question FROM questions WHERE question_id NOT IN (" + str(passed_questions) + ")")
@@ -300,13 +316,13 @@ def get_new_question(room_id):
         cur.execute("UPDATE rooms SET actual_question='1' WHERE room_id='" + str(room_id) + "'")
         con.commit()
         question = get_actual_question(room_id)
-    
+
     con.close()
     return(str(question))
 
 def update_active(user_id, room_id, only_update=False):
     con = sql.connect(database)
-    cur = con.cursor() 
+    cur = con.cursor()
     cur.execute("UPDATE users SET timestamp = CURRENT_TIMESTAMP WHERE user_id = " + str(user_id))#
     con.commit()
     con.close()
@@ -323,7 +339,7 @@ def check_user_exists(user_id):
         return(False)
     else:
         return(True)
-    
+
 def clear_statistics():
     con = sql.connect(database)
     cur = con.cursor()
@@ -338,32 +354,31 @@ def remove_timeouted_user(user_id, room_id):
     cur = con.cursor()
     cur.execute("DELETE FROM users WHERE timestamp <= strftime('%Y-%m-%d %H:%M:%S','now','-22 seconds')")
     con.commit()
-    
+
     cur.execute("SELECT member_id FROM rooms WHERE room_id='" + str(room_id) + "'")
     member_ids = cur.fetchall()[0][0]
     active_member_ids = []
     for member_id in member_ids.split(','):
         if check_user_exists(member_id):
             active_member_ids.append(member_id)
-    
+
     active_member_str = ""
     for member in active_member_ids:
         active_member_str += str(member) + ","
-        
+
     active_member_str = active_member_str[:-1]
-    
+
     cur.execute("UPDATE rooms SET member_id='" + str(active_member_str) + "' WHERE room_id='" + str(room_id) + "'")
 
     con.commit()
-    
+
 
     active_user = get_active_user(room_id)[0]
     if not check_user_exists(active_user):
         print("change active")
         cur.execute("UPDATE rooms SET activeuser_id ='" + str(user_id) + "' WHERE room_id='" + str(room_id) + "'")
         con.commit()
-    
+
     con.close()
-        
+
     # delete empty room
-    

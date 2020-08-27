@@ -1,3 +1,5 @@
+import os
+
 matching_color = [
     ("#e67e22","#2c3e50"),
     ("#2980b9","#2c3e50"),
@@ -27,8 +29,12 @@ matching_color = [
 
 
 
-database = __file__.replace("MyLibs/configure.py", "") + "Databases/database.db"
-logfile = __file__.replace("MyLibs/configure.py", "") + "Databases/log.csv"
+if os.name=="nt":
+    database = __file__.replace("MyLibs\\configure.py", "") + "Databases\\database.db"
+    logfile = __file__.replace("MyLibs\\configure.py", "") + "Databases\\log.csv"
+else:
+    database = __file__.replace("MyLibs/configure.py", "") + "Databases/database.db"
+    logfile = __file__.replace("MyLibs/configure.py", "") + "Databases/log.csv"
 debug = False       # Wird nicht gedebugt
 host = '0.0.0.0'    # Host setzen
 threaded = True     # Multithreading erlaubt mehrere Clients gleichzeitig

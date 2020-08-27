@@ -25,7 +25,10 @@ def admin():
             logger.log( ip=request.remote_addr, message="Hat eine falsche Admin-Session benutzt")
             return render_template("admin.html")
     elif request.method == "POST":
-        if "login" in request.form:
+        if "save_changes" in request.form:
+            print(request.form)
+
+        elif "login" in request.form:
             if "password" in request.form and db.check_password(request.form["password"]):
                 # create session with password hash
                 logger.log( ip=request.remote_addr, message="Hat sich eingeloggt")

@@ -35,7 +35,8 @@ if not os.path.exists("./MyLibs/configure.py"):
     password = Fernet.generate_key()
     Session_Secret_Key = get_random_alphaNumeric_string(64)
 
-    configure="""matching_color = [
+    configure="""import os
+    matching_color = [
 	("#e67e22","#2c3e50"),
 	("#2980b9","#2c3e50"),
 	("#1abc9c","#2c3e50"),
@@ -62,8 +63,12 @@ if not os.path.exists("./MyLibs/configure.py"):
 	("#16a085","#34495e"),
 	]
 
-database = __file__.replace("MyLibs/configure.py", "") + "Databases/database.db"
-logfile = __file__.replace("MyLibs/configure.py", "") + "Databases/log.csv"
+if os.name=="nt":
+    database = __file__.replace("MyLibs\\configure.py", "") + "Databases\\database.db"
+    logfile = __file__.replace("MyLibs\\configure.py", "") + "Databases\\log.csv"
+else:
+    database = __file__.replace("MyLibs/configure.py", "") + "Databases/database.db"
+    logfile = __file__.replace("MyLibs/configure.py", "") + "Databases/log.csv"
 
 debug = False       # Wird nicht gedebugt
 host = '%(host)s'    # Host setzen
