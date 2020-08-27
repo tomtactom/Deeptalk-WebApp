@@ -7,6 +7,7 @@ Version: 0.1v
 
 from flask import *
 from random import randint
+import re
 from MyLibs import db, configure, logger
 
 app = Flask(__name__)
@@ -26,7 +27,13 @@ def admin():
             return render_template("admin.html")
     elif request.method == "POST":
         if "save_changes" in request.form:
-            print(request.form)
+            if "admin_password" in request.form:
+                if not request.form["admin_password"] == "":
+                    if re.findall("/^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,64}$/g", request.form["admin_password"]):
+                        pass # Valid password
+                    else:
+                        pass # Invalid password
+                        
 
         elif "login" in request.form:
             if "password" in request.form and db.check_password(request.form["password"]):
