@@ -38,11 +38,11 @@ def admin():
                 return render_template("admin.html", message="Falsches Passwort. Bitte lade die Seite neu und versuche erneut dich anzumelden")
         elif session and session["login"]:
             if db.check_login(session["login"]):
-                
+
                 if "save_changes" in request.form:
                     if "admin_password" in request.form:
                         if not request.form["admin_password"] == "":
-                            if re.findall("/^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,64}$/g", request.form["admin_password"]):
+                            if re.findall("(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$", request.form["admin_password"]):
                                 print("valid Password")
                             else:
                                 print("invalid password")

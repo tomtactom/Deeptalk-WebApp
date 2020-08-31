@@ -157,7 +157,7 @@
 															</div>
 															<div class="col-6 col-12-xsmall">
 																<label>Host
-																	<input type="text" name="host" placeholder="{{host}}" value="{{host}}" pattern="^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$" required>
+																	<input type="text" name="host" placeholder="{{host}}" value="{{host}}" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required>
 																</label>
 															</div>
 															<div class="col-6 col-12-xsmall">
