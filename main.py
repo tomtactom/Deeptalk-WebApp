@@ -44,9 +44,34 @@ def admin():
                         if not request.form["admin_password"] == "":
                             if re.findall("(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$", request.form["admin_password"]):
                                 print("valid Password")
+                                # change password
                             else:
+                                # delete session
                                 print("invalid password")
-                    return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), questions=db.get_questions(), debugging=configure.debug, host=configure.host, port=configure.port)
+
+                    if "host" in request.form:
+                        if re.findall("^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$", request.form["host"]):
+                            print("valid Host")
+                            # change Host
+                        else:
+                            # delete session
+                            print("invalid host")
+
+                    if "port" in request.form:
+                        if int(request.form["port"]) >= 1 and int(request.form["port"]) <= 65535:
+                            # change port
+                            pass
+                        else:
+                            # delete session
+                            pass
+
+                    if "debug_mode" in request.form:
+                        # debug = True
+                        pass
+                    else:
+                        # debug = false
+                        pass
+                    return redirect("/admin")
 
                 elif "new_question" in request.form:
                     if "question" in request.form:
