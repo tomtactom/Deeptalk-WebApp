@@ -42,7 +42,7 @@ def admin():
                 if "save_changes" in request.form:
                     if "admin_password" in request.form:
                         if not request.form["admin_password"] == "":
-                            if re.findall("(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$", request.form["admin_password"]): //tets
+                            if re.findall("(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$", request.form["admin_password"]):
                                 print("valid Password")
                             else:
                                 print("invalid password")
