@@ -36,7 +36,7 @@ if not os.path.exists("./MyLibs/configure.py"):
     Session_Secret_Key = get_random_alphaNumeric_string(64)
 
     configure="""import os
-    matching_color = [
+matching_color = [
 	("#e67e22","#2c3e50"),
 	("#2980b9","#2c3e50"),
 	("#1abc9c","#2c3e50"),
