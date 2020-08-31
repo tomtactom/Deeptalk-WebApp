@@ -26,16 +26,7 @@ def admin():
             logger.log( ip=request.remote_addr, message="Hat eine falsche Admin-Session benutzt")
             return render_template("admin.html")
     elif request.method == "POST":
-        if "save_changes" in request.form:
-            if "admin_password" in request.form:
-                if not request.form["admin_password"] == "":
-                    if re.findall("/^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,64}$/g", request.form["admin_password"]):
-                        print("valid Password")
-                    else:
-                        print("invalid password")
-
-
-        elif "login" in request.form:
+        if "login" in request.form:
             if "password" in request.form and db.check_password(request.form["password"]):
                 # create session with password hash
                 logger.log( ip=request.remote_addr, message="Hat sich eingeloggt")
@@ -47,7 +38,17 @@ def admin():
                 return render_template("admin.html", message="Falsches Passwort. Bitte lade die Seite neu und versuche erneut dich anzumelden")
         elif session and session["login"]:
             if db.check_login(session["login"]):
-                if "new_question" in request.form:
+                
+                if "save_changes" in request.form:
+                    if "admin_password" in request.form:
+                        if not request.form["admin_password"] == "":
+                            if re.findall("/^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,64}$/g", request.form["admin_password"]):
+                                print("valid Password")
+                            else:
+                                print("invalid password")
+                    return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), user_count=db.get_user_count(), rooms_count=db.get_rooms_count(), questions=db.get_questions(), debugging=configure.debug, host=configure.host, port=configure.port)
+
+                elif "new_question" in request.form:
                     if "question" in request.form:
                         if len(request.form["question"]) < 10 or len(request.form["question"]) > 255:
                             session.clear()
