@@ -30,10 +30,10 @@ def admin():
             if "admin_password" in request.form:
                 if not request.form["admin_password"] == "":
                     if re.findall("/^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,64}$/g", request.form["admin_password"]):
-                        pass # Valid password
+                        print("valid Password")
                     else:
-                        pass # Invalid password
-                        
+                        print("invalid password")
+
 
         elif "login" in request.form:
             if "password" in request.form and db.check_password(request.form["password"]):
