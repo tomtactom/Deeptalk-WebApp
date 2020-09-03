@@ -2,6 +2,9 @@ import sqlite3 as sql
 import hashlib
 from random import randint
 from cryptography.fernet import Fernet
+import hashlib
+
+import install
 
 from MyLibs import configure
 
@@ -24,6 +27,10 @@ def check_login(pass_hash):
         return True
     else:
         return False
+
+def change_admin_password(admin_password):
+    admin_password_hash = hashlib.sha512(bytes(admin_password + configure.hash_salt, "utf8")).hexdigest()
+    install.write(configure.host, configure.port, configure.hash_salt, admin_password_hash, configure.password, configure.Session_Secret_Key)
 
 
 def delete_user(user_id, room_id):
