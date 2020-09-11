@@ -97,5 +97,5 @@ Session_Secret_Key = b'%(Session_Secret_Key)s'
     with open("./MyLibs/configure.py", "w") as file:
         file.write(configure)
 
-if __name__ == "__init__":
+if __name__ == "__main__":
     full_install()
