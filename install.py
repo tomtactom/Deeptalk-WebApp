@@ -36,7 +36,7 @@ def full_install():
         password = Fernet.generate_key()
         Session_Secret_Key = get_random_alphaNumeric_string(64)
 
-        write(host, port, hash_salt, admin_password, password, Session_Secret_Key)
+        write(host, port, hash_salt, admin_password_hash, password, Session_Secret_Key)
 
         if os.path.exists("./Databases/database.rm.db"):
             os.rename(r'./Databases/database.rm.db', r'./Databases/database.db')
