@@ -65,8 +65,7 @@ def admin():
                     if "admin_password" in request.form:
                         if not request.form["admin_password"] == "":
                             if re.findall("(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$", request.form["admin_password"]):
-                                db.change_admin_password(request.form["admin_password"])
-                                # change password
+                                db.change_admin_password(request.form["admin_password"]) # change password
                             else:
                                 session.clear()
                                 logger.log(ip=request.remote_addr, message="attempted to change admin password", )
@@ -74,7 +73,7 @@ def admin():
                     if "host" in request.form:
                         if re.findall("^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$", request.form["host"]):
                             print("valid Host")
-                            # change Host
+                            db.change_host(request.form["host"])
                         else:
                             # delete session
                             print("invalid host")
