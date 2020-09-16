@@ -8,11 +8,29 @@ Version: 0.1v
 from flask import *
 from random import randint
 import re
-import importlib
+import os
+import sys
 from MyLibs import db, configure, logger
 
 app = Flask(__name__)
 app.secret_key = configure.Session_Secret_Key
+
+@app.route('/restart', methods=['GET'])# Server restart
+def restart():
+    if request.method == "GET":
+        if session.get("login"):
+            if db.check_login(session["login"]):
+                session.clear()
+                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+            else:
+                session.clear()
+        return "1";
+
+@app.route('/loading', methods=['GET'])# Admin Ladeseite (client redirect)
+def loading():
+    if request.method == "GET":
+        return render_template("loading.html")
+
 
 @app.route('/admin', methods=['GET', 'POST'])# Login seite
 def admin():
@@ -75,9 +93,9 @@ def admin():
                     else:
                         # debug = false
                         pass
-                    importlib.reload(configure)
-                    #test
-                    return redirect("/admin")
+                    return redirect("/loading")
+
+                    ##########################################################################################################################################################
 
                 elif "new_question" in request.form:
                     if "question" in request.form:
@@ -144,7 +162,6 @@ def main():
             room_id = db.create_new_room()
             return(redirect("/invite/"+room_id))
     elif request.method == "GET":
-        #
         return render_template("index.html")
 
 
