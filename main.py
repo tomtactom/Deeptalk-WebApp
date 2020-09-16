@@ -71,6 +71,7 @@ def admin():
                     else:
                         # debug = false
                         pass
+                    importlib.reload(configure)
                     return redirect("/admin")
 
                 elif "new_question" in request.form:
