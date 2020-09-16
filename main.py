@@ -8,6 +8,7 @@ Version: 0.1v
 from flask import *
 from random import randint
 import re
+import importlib
 from MyLibs import db, configure, logger
 
 app = Flask(__name__)
@@ -71,7 +72,8 @@ def admin():
                     else:
                         # debug = false
                         pass
-                    importlib.reload(configure)
+                    importlib.reload(Mylibs)
+                    from MyLibs import configure
                     return redirect("/admin")
 
                 elif "new_question" in request.form:
