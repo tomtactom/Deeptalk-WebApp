@@ -33,6 +33,7 @@ def change_admin_password(admin_password):
     install.write(configure.host, configure.port, configure.hash_salt, admin_password_hash, configure.password, configure.Session_Secret_Key.decode("utf8"))
 
 def change_host(host):
+    print(host)
     install.write(host, configure.port, configure.hash_salt, configure.admin_pw_hash, configure.password, configure.Session_Secret_Key.decode("utf8"))
 
 
