@@ -4,6 +4,8 @@ import hashlib
 import os
 from cryptography.fernet import Fernet
 
+is_main = False
+
 def full_install():
     if not os.path.exists("./MyLibs/configure.py"):
 
@@ -94,8 +96,13 @@ password = %(password)s # password for room_id
 Session_Secret_Key = b'%(Session_Secret_Key)s'
     """ % {"host": host, "port": port , "hash_salt":hash_salt, "admin_password_hash":admin_password_hash, "password":password, "Session_Secret_Key":Session_Secret_Key}
 
-    with open("./MyLibs/configure.py", "w") as file:
-        file.write(configure)
+    if is_main:
+        with open("./MyLibs/configure.py", "w") as file:
+            file.write(configure)
+    else:
+        with open("./configure.py", "w") as file:
+            file.write(configure)
 
 if __name__ == "__main__":
+    is_main  = True
     full_install()
