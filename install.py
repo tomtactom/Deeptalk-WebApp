@@ -92,7 +92,7 @@ admin_pw_hash = "%(admin_password_hash)s"
 # admin_pw_hash  = hashlib.sha512(bytes(<your_password> + hash_salt, "utf8")).hexdigest()
 password = %(password)s # password for room_id
 Session_Secret_Key = b'%(Session_Secret_Key)s'
-    """ % {"host": host, "port": port , "hash_salt":hash_salt, "admin_password_hash":admin_password_hash, "password":password, "Session_Secret_Key":Session_Secret_Key.decode("utf8")}
+    """ % {"host": host, "port": port , "hash_salt":hash_salt, "admin_password_hash":admin_password_hash, "password":password, "Session_Secret_Key":Session_Secret_Key}
 
     with open("./MyLibs/configure.py", "w") as file:
         file.write(configure)
