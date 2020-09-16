@@ -73,7 +73,7 @@ def admin():
                         # debug = false
                         pass
                     importlib.reload(Mylibs)
-                    from MyLibs import configure
+                    
                     return redirect("/admin")
 
                 elif "new_question" in request.form:
