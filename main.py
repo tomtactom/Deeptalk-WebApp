@@ -23,6 +23,9 @@ def admin():
             if db.check_login(session["login"]):
                 logger.log( ip=request.remote_addr, message="Ist als Admin eingeloggt")
                 return render_template("admin.html", loggedin=True, question_count=db.get_question_count(), rooms_count=db.get_rooms_count(), user_count=db.get_user_count(), questions=db.get_questions(), debugging=configure.debug, host=configure.host, port=configure.port)
+            else:
+                session.clear()
+                return redirect("/")
         else:
             logger.log( ip=request.remote_addr, message="Hat eine falsche Admin-Session benutzt")
             return render_template("admin.html")
@@ -72,7 +75,7 @@ def admin():
                     else:
                         # debug = false
                         pass
-                    importlib.reload(Mylibs)
+                    importlib.reload(configure)
                     #test
                     return redirect("/admin")
 
