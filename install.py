@@ -45,7 +45,7 @@ def full_install():
     else:
         print("An error occurred. The setup was already done before")
 
-def write(host, port, hash_salt, admin_password_hash, password, Session_Secret_Key):
+def write(host, port, hash_salt, admin_pw_hash, password, Session_Secret_Key):
     configure="""
 import os
 matching_color = [
@@ -88,13 +88,14 @@ threaded = True     # Multithreading erlaubt mehrere Clients gleichzeitig
 port = '%(port)s'       # Port setzen
 
 hash_salt = "%(hash_salt)s"  #  Your random hash salt
-admin_pw_hash = "%(admin_password_hash)s"
+admin_pw_hash = "%(admin_pw_hash)s"
 # admin_pw_hash  = hashlib.sha512(bytes(<your_password> + hash_salt, "utf8")).hexdigest()
 password = %(password)s # password for room_id
 Session_Secret_Key = b'%(Session_Secret_Key)s'
-    """ % {"host": host, "port": port , "hash_salt":hash_salt, "admin_password_hash":admin_password_hash, "password":password, "Session_Secret_Key":Session_Secret_Key}
+    """ % {"host": host, "port": port , "hash_salt":hash_salt, "admin_pw_hash":admin_pw_hash, "password":password, "Session_Secret_Key":Session_Secret_Key}
     with open(__file__.split('install.py')[0] + "MyLibs/configure.py", "w") as file:
         file.write(configure)
+    return (True)
 
 if __name__ == "__main__":
     full_install()

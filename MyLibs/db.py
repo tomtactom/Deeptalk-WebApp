@@ -28,13 +28,12 @@ def check_login(pass_hash):
     else:
         return False
 
+def change_config(host, debug, port, admin_pw_hash):
+    install.write(host, port, hash_salt, admin_pw_hash, configure.password, configure.Session_Secret_Key.decode("utf8"))
+
 def change_admin_password(admin_password):
     admin_password_hash = hashlib.sha512(bytes(admin_password + configure.hash_salt, "utf8")).hexdigest()
-    install.write(configure.host, configure.port, configure.hash_salt, admin_password_hash, configure.password, configure.Session_Secret_Key.decode("utf8"))
-
-def change_host(host):
-    print(host)
-    install.write(host, configure.port, configure.hash_salt, configure.admin_pw_hash, configure.password, configure.Session_Secret_Key.decode("utf8"))
+    return(admin_password_hash)
 
 
 def delete_user(user_id, room_id):

@@ -21,10 +21,16 @@ def restart():
         if session.get("login"):
             if db.check_login(session["login"]):
                 session.clear()
-                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+                try:
+                    os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+                except:
+                    return("Die Einstellungen konnten nicht gespeichert werden, da etwas schiefgelaufen ist.")
             else:
                 session.clear()
-        return "1";
+                return(redirect("/"))
+        else:
+            session.clear()
+            return(redirect("/"))
 
 @app.route('/loading', methods=['GET'])# Admin Ladeseite (client redirect)
 def loading():
@@ -62,10 +68,16 @@ def admin():
             if db.check_login(session["login"]):
 
                 if "save_changes" in request.form:
+                    host = configure.host
+                    debug = configure.debug
+                    port = configure.port
+                    admin_password_hash = configure.admin_pw_hash
                     if "admin_password" in request.form:
                         if not request.form["admin_password"] == "":
                             if re.findall("(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$", request.form["admin_password"]):
-                                db.change_admin_password(request.form["admin_password"]) # change password
+
+                                admin_password_hash = db.change_admin_password(request.form["admin_password"])
+
                             else:
                                 session.clear()
                                 logger.log(ip=request.remote_addr, message="attempted to change admin password", )
@@ -73,25 +85,26 @@ def admin():
                     if "host" in request.form:
                         if re.findall("^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$", request.form["host"]):
                             print("valid Host")
-                            db.change_host(request.form["host"])
+                            host = request.form["host"]
                         else:
                             # delete session
                             print("invalid host")
 
                     if "port" in request.form:
                         if int(request.form["port"]) >= 1 and int(request.form["port"]) <= 65535:
-                            # change port
-                            pass
+                            port = request.form["port"]
                         else:
                             # delete session
                             pass
 
                     if "debug_mode" in request.form:
-                        # debug = True
-                        pass
+                        debug = request.form["debug_mode"]
                     else:
                         # debug = false
                         pass
+
+                    db.change_config(host, debug, port, admin_password_hash)
+
                     return redirect("/loading")
 
                     ##########################################################################################################################################################
