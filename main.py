@@ -24,7 +24,7 @@ def restart():
                 try:
                     os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
                 except:
-                    return("Die Einstellungen konnten nicht gespeichert werden, da etwas schiefgelaufen ist.")
+                    os.system("sudo service deeptalk restart")
             else:
                 session.clear()
                 return(redirect("/"))
@@ -98,10 +98,10 @@ def admin():
                             pass
 
                     if "debug_mode" in request.form:
-                        debug = request.form["debug_mode"]
-                    else:
-                        # debug = false
-                        pass
+                        if request.form["debug_mode"] == 1:
+                            debug = True
+                        else:
+                            debug = False
 
                     db.change_config(host, debug, port, admin_password_hash)
 
