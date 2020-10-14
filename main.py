@@ -305,6 +305,7 @@ if __name__ == "__main__":
 # Einladungslink teilen Button  --> Design
 # Admin seite passwörter ändern
 # Online configure.py Editor
+# Schwarzen Rand unten bei schmalem Fenster entfernen
 
 # Impressum/Datenschutz
 # Kontaktformularseite &  Eigene Fragen einreichen
