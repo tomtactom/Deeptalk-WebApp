@@ -1,2 +1,2 @@
 Flask==1.1.1
-cryptography==2.8
+cryptography==3.2
