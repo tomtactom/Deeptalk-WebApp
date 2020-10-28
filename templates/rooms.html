@@ -78,8 +78,8 @@
 						<form action="/logout" id="logout_header" method="post">
 	              <button type="submit" name="logout" value="1">Abmelden</button>
 	          </form>
-						<a href='whatsapp://send?text=http://www.deeptalk.tk:8080/invite/{{room}}' id="whatsapp_button"><img src="../static/icon/whatsapp_button.png" hight="20pt" width="20pt" alt="whatsapp"></a>
-	          <a href='https://web.skype.com/share?url=http://www.deeptalk.tk:8080/invite/{{room}}' id="skype_button"><img src="../static/icon/skype_button.png" hight="20pt" width="20pt" alt="skype"></a>
+						<a href='whatsapp://send?text=http://www.deeptalk.tk:8080/invite/{{room}}' id="whatsapp_button"><img src="../static/icon/whatsapp_button.png" alt="whatsapp"></a>
+	          <a href='https://web.skype.com/share?url=http://www.deeptalk.tk:8080/invite/{{room}}' id="skype_button"><img src="../static/icon/skype_button.png" alt="skype"></a>
 	          <script>
 	          	function copy() {
 	          		  const el = document.createElement('textarea');
@@ -92,7 +92,7 @@
 	          </script>
 						<label>
 	          	<input type="hidden" readonly onclick="copy()" value="http://www.deeptalk.tk:8080/invite/{{room}}" style="cursor:pointer;" id="copy_button">
-							<img src="../static/icon/copy_button.png" hight="20pt" width="20pt" alt="copy">
+							<img src="../static/icon/copy_button.png" alt="copy">
 						</label>
 					</asside>
 			</section>
