@@ -3957,9 +3957,9 @@ input, select, textarea {
 	    justify-content: center;
 		}
 
-		#buttons #whatsapp_button,
-		#buttons #skype_button,
-		#buttons #copy_button {
+		#whatsapp_button,
+		#skype_button,
+		#copy_button {
 			margin: 10px;
 			height: 32px;
 			width: 32px;
