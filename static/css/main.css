@@ -3951,7 +3951,23 @@ input, select, textarea {
 
 
 		}
+		#buttons {
+			display: flex;
+	    flex-wrap: wrap;
+	    justify-content: center;
+		}
 
+		#buttons #whatsapp_button {
+			
+		}
+
+		#buttons #skype_button {
+
+		}
+
+		#buttons #copy_button {
+
+		}
 
 		@media screen and (min-width: 736px){
 			#logout_header{
