@@ -9,7 +9,6 @@ Manuell:
 pip install -r requirements.txt
 ```
 5. Führe die `install.py` zum einmaligen Installieren des Projektes aus
-6. tets
 ```
 python3 install.py
 ```
