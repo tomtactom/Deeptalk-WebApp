@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Apr 22 16:24:52 2020
-Version: 0.2v
+Version: 0.0.2v
 @author: Luca, Tom
 """
 
